@@ -2,6 +2,7 @@ class Cell():
 
     def __init__(self, a_row_i, a_col_i):
         self.current_state = '-'
+        self.next_state = '-'
         self.r_i = a_row_i
         self.c_i = a_col_i
     
@@ -32,4 +33,34 @@ class Cell():
             if c < max_size_0:
                 neighbours.append(a_grid[r+1][c+1])
         self.neigh = neighbours
+    
+    def make_alive(self):
+        self.current_state = 'x'
+    
+    def is_alive(self):
+        if self.current_state == 'x':
+            return True
+        else:
+            return False
+    
+    def compute_next_iteration(self):
+        alive_ne = 0
+        for ne in self.neigh:
+            if ne.is_alive() == True:
+                alive_ne = alive_ne + 1
+        
+        if self.is_alive() == True:
+            if (alive_ne == 2 or alive_ne == 3):
+                self.next_state = 'x' #I am alive and I remain alive
+            else:
+                self.next_state = '-' #I die, either of solitude or of noise
+        else:
+            if (alive_ne == 3):
+                self.next_state = 'x' #I resurrect from my ashes
+            else:
+                self.next_state = '-' #I was dead and I remain dead
+    
+    def evolve(self):
+        self.current_state = self.next_state
+
 
